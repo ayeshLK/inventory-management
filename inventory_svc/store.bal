@@ -1,14 +1,14 @@
-type Product record {
+type Product record {|
     readonly int id;
     string name;
     string description;
     decimal price;
-};
+|};
 
-type Inventory record {
+type Inventory record {|
     readonly int productId;
     int quantityAvailable;
-};
+|};
 
 table<Product> key(id) products = table [
     {id: 1, name: "Apple MacBook Pro", description: "High-performance laptop with Retina display", price: 1299.99},

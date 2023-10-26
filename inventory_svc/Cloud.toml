@@ -1,0 +1,4 @@
+[container.image]
+repository="ayesh"
+name="inventory-svc"
+tag="0.0.1"
