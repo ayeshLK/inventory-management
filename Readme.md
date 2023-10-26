@@ -4,7 +4,7 @@ The sample is based on a simple API written for a inventory-management system. F
 
 <img src="inventory-mng-system.jpg" alt="drawing" width='400'/>
 
-Following is the service description.
+Following is the interface of the Order service.
 ```ballerina
 type OrderService service object {
     *http:Service;
@@ -17,8 +17,9 @@ type OrderService service object {
 
 ## Prerequisites
 
-- Ballerina SL update 8+
+- Ballerina Swan Lake Update 8 (or higher)
 - Docker
+- [`Ballerina`](https://marketplace.visualstudio.com/items?itemName=WSO2.ballerina) and [`REST Client`](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extensions in VSCode 
 
 ## Setup environment
 
@@ -48,4 +49,3 @@ bal run order_svc/target/bin/order_svc.jar
 
 - To start the completed setup run `docker compose up`.
 - To send request open `inventory-mng-request.http` file using VS Code with `REST Client` extension.
-
