@@ -5,7 +5,7 @@ type OrderService service object {
 
     resource function get orders() returns Order[]|error;
     resource function get orders/[int id]() returns Order|OrderNotFound|error;
-    resource function post orders(NewOrder newOrder) returns OrderCreated;
+    resource function post orders(NewOrder newOrder) returns OrderCreated|OrderRejected;
 };
 
 enum OrderStatus {
@@ -25,9 +25,14 @@ public type NewOrder record {|
     int quantity;
 |};
 
-public type OrderCreated record {|
+type OrderCreated record {|
     *http:Created;
     map<string> headers;
+|};
+
+type OrderRejected record {|
+    *http:BadRequest;
+    ErrorDetails body;
 |};
 
 type OrderNotFound record {|
