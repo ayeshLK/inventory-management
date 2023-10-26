@@ -1,4 +1,5 @@
 import ballerina/http;
+import ballerina/sql;
 
 type OrderService service object {
     *http:Service;
@@ -14,6 +15,9 @@ enum OrderStatus {
 
 type Order record {|
     int id;
+    @sql:Column {
+        name: "product_id"
+    }
     int productId;
     int quantity;
     OrderStatus status;
