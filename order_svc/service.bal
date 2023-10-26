@@ -31,12 +31,16 @@ service OrderService on new http:Listener(9091) {
         return result;
     }
 
-    resource function post orders(NewOrder newOrder) returns OrderCreated|OrderRejected {
-        OrderCreated oc = {
+    resource function post orders(NewOrder newOrder) returns OrderCreated|OrderRejected|error {
+        sql:ExecutionResult result = check self.orderDb->execute(`
+            INSERT INTO orders(product_id, quantity, status)
+            VALUES (${newOrder.productId}, ${newOrder.quantity}, ${ACCEPTED});`);
+        int orderId = check result.lastInsertId.ensureType();
+        OrderCreated orderCreated = {
             headers: {
-                "Location": "/orders/1"
+                "Location": string `/orders/${orderId}`
             }
         };
-        return oc;
+        return orderCreated;
     }
 }
