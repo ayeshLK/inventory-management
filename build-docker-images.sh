@@ -13,5 +13,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-( cd inventory_svc ; bal clean ; bal build)
-( cd order_svc ; bal clean ; bal build)
+( cd inventory_svc ; bal clean ; bal build --cloud=docker)
+( cd order_svc ; bal clean ; bal build --cloud=docker)
