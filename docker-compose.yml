@@ -1,18 +1,18 @@
 version: '2.14.0'
 
 services:
-  order-svc:
-    image: 'ayesh/order-svc:0.0.1'
-    depends_on: 
-      inventory-svc: 
-          condition: service_started
-      mysql: 
-          condition: service_healthy
-    network_mode: "host"
+  # order-svc:
+  #   image: 'ayesh/order-svc:0.0.1'
+  #   depends_on: 
+  #     inventory-svc: 
+  #         condition: service_started
+  #     mysql: 
+  #         condition: service_healthy
+  #   network_mode: "host"
 
-  inventory-svc:
-    image: 'ayesh/inventory-svc:0.0.1'
-    network_mode: "host"
+  # inventory-svc:
+  #   image: 'ayesh/inventory-svc:0.0.1'
+  #   network_mode: "host"
 
   mysql:
     image: 'mysql:8-oracle'
