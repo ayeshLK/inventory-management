@@ -5,10 +5,12 @@ import ballerinax/mysql.driver as _;
 
 service OrderService on new http:Listener(9091) {
     private final mysql:Client orderDb;
+    private final http:Client inventoryClient;
 
     public function init() returns error? {
         self.orderDb = check new(host = "localhost", port = 3306, 
             user = "user", password = "password", database = "order_database");
+        self.inventoryClient = check new("localhost:9090");
     }
 
     resource function get orders() returns Order[]|error {
@@ -32,6 +34,39 @@ service OrderService on new http:Listener(9091) {
     }
 
     resource function post orders(NewOrder newOrder) returns OrderCreated|OrderRejected|error {
+        InventoryUpdate updateRequest = {
+            requestedQuantity: newOrder.quantity
+        };
+        http:Response inventoryUpdateResponse = check self.inventoryClient->/products/[newOrder.productId]/inventory.put(
+            message = updateRequest
+        );
+        if inventoryUpdateResponse.statusCode == http:STATUS_NOT_FOUND {
+            OrderRejected productNotFound = {
+                body: {
+                    message: string `Product id: ${newOrder.productId} not found`, 
+                    details: string `/orders`
+                }
+            };
+            return productNotFound;
+        }
+        if inventoryUpdateResponse.statusCode == http:STATUS_NOT_ACCEPTABLE {
+            OrderRejected quantityUnavailable = {
+                body: {
+                    message: string `Requested quantity for Product id: ${newOrder.productId} unavailable`, 
+                    details: string `/orders`
+                }
+            };
+            return quantityUnavailable;
+        }
+        if inventoryUpdateResponse.statusCode != http:STATUS_ACCEPTED {
+            OrderRejected nonAcceptedResult = {
+                body: {
+                    message: string `Unknown error occurred while updating inventory`, 
+                    details: string `/orders`
+                }
+            };
+            return nonAcceptedResult;
+        }
         sql:ExecutionResult result = check self.orderDb->execute(`
             INSERT INTO orders(product_id, quantity, status)
             VALUES (${newOrder.productId}, ${newOrder.quantity}, ${ACCEPTED});`);
@@ -44,3 +79,7 @@ service OrderService on new http:Listener(9091) {
         return orderCreated;
     }
 }
+
+type InventoryUpdate record {|
+    int requestedQuantity;
+|};
