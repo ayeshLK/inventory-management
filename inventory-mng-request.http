@@ -1,0 +1,31 @@
+### Get products
+GET http://localhost:9090/products
+
+### Get a specific product
+GET http://localhost:9090/products/1
+
+### Get the current inventory for a product
+GET http://localhost:9090/products/1/inventory
+
+### Update inventory
+PUT http://localhost:9090/products/1/inventory
+content-type: application/json
+
+{
+    "requestedQuantity": 2
+}
+
+### Get orders
+GET http://localhost:9091/orders
+
+### Get a specific order
+GET http://localhost:9091/orders/1
+
+### Create a new order
+PUT http://localhost:9091/orders
+content-type: application/json
+
+{
+    "productId": 1,
+    "quantity": 3
+}
