@@ -3,8 +3,6 @@ version: '2.14.0'
 services:
   order-svc:
     image: 'ayesh/order-svc:0.0.1'
-    ports:
-      - '9091:9091'
     depends_on: 
       inventory-svc: 
           condition: service_started
