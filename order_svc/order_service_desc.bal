@@ -9,7 +9,7 @@ type OrderService service object {
 };
 
 enum OrderStatus {
-    INITIAL, ACCEPTED, REJECTED, PROCESSING, DONE
+    ACCEPTED, REJECTED, DONE
 }
 
 type Order record {|
